@@ -17,3 +17,11 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# Local credentials documentation
+USERS_CREDENTIALS.md
+
+# Documentation & temporary markdown guides
+gemini-code-*.md
+apes_workflow_guide.md
+apes_detailed_flow_guide.md
