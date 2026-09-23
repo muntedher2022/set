@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/admin/login');
 });
+Route::get('/login', fn () => redirect()->to('/admin/login'))->name('login');
 
 
 // مسارات تفعيل التراخيص والتحقق والـ OTP

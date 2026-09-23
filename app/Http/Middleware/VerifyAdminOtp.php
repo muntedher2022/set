@@ -72,20 +72,19 @@ class VerifyAdminOtp
                             \Illuminate\Support\Facades\Http::timeout(5)->post('http://127.0.0.1:3333/send-otp', [
                                 'phone'   => $user->phone,
                                 'otp'     => $otp,
-                                'project' => config('app.name', 'نظام التقييم (SET)') . " - {$user->name}",
+                                'project' => 'نظام تقييم وتطوير الموظفين (SET)',
                             ]);
                         } catch (\Exception $e) {
                             \Illuminate\Support\Facades\Log::error('SET WhatsApp OTP failed: ' . $e->getMessage());
                         }
                     }
 
-                    // 2. إرسال كود التحقق إلى البريد الإلكتروني للمسؤول كقناة إضافية إن وُجد
+                    // 2. إرسال كود التحقق إلى البريد الإلكتروني بتنسيق HTML الأنيق
                     if (in_array($channel, ['email', 'both']) && $hasEmail) {
                         try {
-                            \Illuminate\Support\Facades\Mail::raw("رمز التحقق الثنائي الخاص بك لنظام " . config('app.name', 'نظام التقييم (SET)') . " هو: {$otp}", function ($message) use ($user) {
-                                $message->to($user->email)
-                                        ->subject('رمز التحقق الثنائي - ' . config('app.name', 'نظام التقييم (SET)'));
-                            });
+                            \Illuminate\Support\Facades\Mail::to($user->email)->send(
+                                new \App\Mail\UserOtpMail($otp, $request->ip(), $user->name ?? $user->username ?? 'المسؤول', 'نظام تقييم وتطوير الموظفين (SET)')
+                            );
                         } catch (\Exception $e) {
                             \Illuminate\Support\Facades\Log::error('SET Email OTP failed: ' . $e->getMessage());
                         }
