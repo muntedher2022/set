@@ -72,7 +72,7 @@ class VerifyAdminOtp
                             \Illuminate\Support\Facades\Http::timeout(5)->post('http://127.0.0.1:3333/send-otp', [
                                 'phone'   => $user->phone,
                                 'otp'     => $otp,
-                                'project' => 'نظام تقييم وتطوير الموظفين (SET)',
+                                'project' => 'نظام تقييم وتطوير الموظفين',
                             ]);
                         } catch (\Exception $e) {
                             \Illuminate\Support\Facades\Log::error('SET WhatsApp OTP failed: ' . $e->getMessage());
@@ -83,7 +83,7 @@ class VerifyAdminOtp
                     if (in_array($channel, ['email', 'both']) && $hasEmail) {
                         try {
                             \Illuminate\Support\Facades\Mail::to($user->email)->send(
-                                new \App\Mail\UserOtpMail($otp, $request->ip(), $user->name ?? $user->username ?? 'المسؤول', 'نظام تقييم وتطوير الموظفين (SET)')
+                                new \App\Mail\UserOtpMail($otp, $request->ip(), $user->name ?? $user->username ?? 'المسؤول', 'نظام تقييم وتطوير الموظفين')
                             );
                         } catch (\Exception $e) {
                             \Illuminate\Support\Facades\Log::error('SET Email OTP failed: ' . $e->getMessage());
