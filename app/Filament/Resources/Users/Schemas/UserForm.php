@@ -25,6 +25,14 @@ class UserForm
                     ->unique(ignoreRecord: true)
                     ->label('البريد الإلكتروني'),
                 
+                TextInput::make('phone')
+                    ->tel()
+                    ->nullable()
+                    ->placeholder('07701234567')
+                    ->helperText('يُستخدم لاستلام رمز الدخول والتحقق الثنائي عبر الواتساب')
+                    ->maxLength(20)
+                    ->label('رقم الهاتف (واتساب)'),
+                
                 TextInput::make('password')
                     ->password()
                     ->maxLength(255)

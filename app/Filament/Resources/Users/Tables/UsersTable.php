@@ -24,6 +24,11 @@ class UsersTable
                     ->searchable()
                     ->label('البريد الإلكتروني'),
                 
+                TextColumn::make('phone')
+                    ->searchable()
+                    ->default('—')
+                    ->label('رقم الهاتف'),
+                
                 TextColumn::make('role')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
