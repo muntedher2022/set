@@ -18,12 +18,3 @@
 * **Framework:** Laravel 11
 * **Language:** PHP 8.4
 * **Database:** MySQL / SQLite
-
-## 🚀 التشغيل المحلي
-```bash
-composer install
-php artisan migrate --seed
-php artisan serve
-```
-* **رابط الموقع المحلي:** `https://set.test`
-* **بيانات الدخول:** مراجعة ملف `USERS_CREDENTIALS.md`
