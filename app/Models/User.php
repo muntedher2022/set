@@ -23,6 +23,9 @@ class User extends Authenticatable
         'password',
         'manager_id',
         'role',
+        'is_totp_required',
+        'two_factor_secret',
+        'two_factor_confirmed_at',
     ];
 
     /**
@@ -33,6 +36,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
     ];
 
     /**
@@ -45,7 +49,44 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_totp_required' => 'boolean',
+            'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    /**
+     * هل تم إلزام المستخدم بالمصادقة الثنائية عبر التطبيق من قِبل الإدارة؟
+     */
+    public function isTotpRequired(): bool
+    {
+        return (bool) $this->is_totp_required;
+    }
+
+    /**
+     * هل قام المستخدم بربط جهازه بالتطبيق وتأكيده؟
+     */
+    public function hasTotpSetup(): bool
+    {
+        return !empty($this->two_factor_secret) && !is_null($this->two_factor_confirmed_at);
+    }
+
+    /**
+     * هل المصادقة الثنائية مفعّلة وجاهزة للتحقق عند الدخول؟
+     */
+    public function hasTotpEnabled(): bool
+    {
+        return $this->isTotpRequired() && $this->hasTotpSetup();
+    }
+
+    /**
+     * إعادة تعيين/تصفير إعدادات TOTP للمستخدم (من قبل الأدمن)
+     */
+    public function resetTotp(): void
+    {
+        $this->forceFill([
+            'two_factor_secret' => null,
+            'two_factor_confirmed_at' => null,
+        ])->save();
     }
 
     // Role helper methods

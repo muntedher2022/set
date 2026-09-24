@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Hash;
 
@@ -56,6 +57,11 @@ class UserForm
                     ->searchable()
                     ->nullable()
                     ->label('المشرف / الكوتش المباشر'),
+
+                Toggle::make('is_totp_required')
+                    ->label('إلزام المصادقة بتطبيق الهاتف (TOTP)')
+                    ->helperText('عند التفعيل، سيُطالب هذا المستخدم بربط تطبيق Google أو Microsoft Authenticator وإدخال الرمز عند كل تسجيل دخول.')
+                    ->default(false),
             ]);
     }
 }
