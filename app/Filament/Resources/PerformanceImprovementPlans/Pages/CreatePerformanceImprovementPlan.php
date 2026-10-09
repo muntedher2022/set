@@ -13,5 +13,4 @@ class CreatePerformanceImprovementPlan extends CreateRecord
     {
         return $this->getResource()::getUrl('index');
     }
-
 }

@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\GoalAndKpis\Schemas;
 
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextArea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +45,9 @@ class GoalAndKpiForm
                         function ($get, $record) {
                             return function (string $attribute, $value, $fail) use ($get, $record) {
                                 $userId = $get('user_id');
-                                if (!$userId) return;
+                                if (! $userId) {
+                                    return;
+                                }
 
                                 $newWeight = floatval($value);
                                 $currentTotalWeight = DB::table('goals_and_kpis')
@@ -59,7 +61,7 @@ class GoalAndKpiForm
                                     $fail("مجموع الأوزان الحالية للموظف هو {$currentTotalWeight}%. إضافة هذا الهدف بوزن {$newWeight}% يتجاوز الحد الأقصى الرياضي المسموح به (100%)!");
                                 }
                             };
-                        }
+                        },
                     ])
                     ->helperText('الوزن النسبي يجب أن يكون بين 10% و 30%، والمجموع الإجمالي لأهداف الموظف يجب ألا يتجاوز 100%')
                     ->label('الوزن النسبي (%)'),
@@ -82,7 +84,7 @@ class GoalAndKpiForm
                                     $fail('يجب أن يكون المستهدف مختلفاً عن خط الأساس ليمثل هدفاً متمدداً (سواء بالزيادة أو النقصان لمؤشرات التقليل كالأخطاء).');
                                 }
                             };
-                        }
+                        },
                     ])
                     ->label('المستهدف السنوي المتمدد (Target)'),
 

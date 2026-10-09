@@ -2,12 +2,12 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\CriticalIncidentLog;
+use App\Models\IndividualDevelopmentPlan;
+use App\Models\PerformanceImprovementPlan;
+use App\Services\KaizenCompoundService;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use App\Models\CriticalIncidentLog;
-use App\Models\PerformanceImprovementPlan;
-use App\Models\IndividualDevelopmentPlan;
-use App\Services\KaizenCompoundService;
 
 class PerformancePulseWidget extends StatsOverviewWidget
 {

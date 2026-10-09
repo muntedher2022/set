@@ -11,7 +11,6 @@ use App\Models\PerformanceImprovementPlan;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -34,6 +33,7 @@ class PerformanceImprovementPlanResource extends Resource
 
         return $query->where('user_id', $user->id);
     }
+
     protected static ?string $model = PerformanceImprovementPlan::class;
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-exclamation-triangle';

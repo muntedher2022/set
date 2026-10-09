@@ -16,5 +16,4 @@ class EditPerformanceImprovementPlan extends EditRecord
             DeleteAction::make(),
         ];
     }
-
 }

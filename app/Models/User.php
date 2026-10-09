@@ -67,7 +67,7 @@ class User extends Authenticatable
      */
     public function hasTotpSetup(): bool
     {
-        return !empty($this->two_factor_secret) && !is_null($this->two_factor_confirmed_at);
+        return ! empty($this->two_factor_secret) && ! is_null($this->two_factor_confirmed_at);
     }
 
     /**

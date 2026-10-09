@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Hash;
@@ -18,14 +18,14 @@ class UserForm
                     ->required()
                     ->maxLength(255)
                     ->label('الاسم الكامل'),
-                
+
                 TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255)
                     ->unique(ignoreRecord: true)
                     ->label('البريد الإلكتروني'),
-                
+
                 TextInput::make('phone')
                     ->tel()
                     ->nullable()
@@ -33,7 +33,7 @@ class UserForm
                     ->helperText('يُستخدم لاستلام رمز الدخول والتحقق الثنائي عبر الواتساب')
                     ->maxLength(20)
                     ->label('رقم الهاتف (واتساب)'),
-                
+
                 TextInput::make('password')
                     ->password()
                     ->maxLength(255)
@@ -41,7 +41,7 @@ class UserForm
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create')
                     ->label('كلمة المرور'),
-                
+
                 Select::make('role')
                     ->options([
                         'admin' => 'مدير النظام (Admin)',

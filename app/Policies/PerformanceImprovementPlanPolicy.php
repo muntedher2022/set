@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\PerformanceImprovementPlan;
+use App\Models\User;
 
 class PerformanceImprovementPlanPolicy
 {
@@ -20,12 +20,13 @@ class PerformanceImprovementPlanPolicy
         if ($user->isCoach()) {
             return $model->user && $model->user->manager_id === $user->id;
         }
+
         return $model->user_id === $user->id;
     }
 
     public function create(User $user): bool
     {
-        return !$user->isEmployee();
+        return ! $user->isEmployee();
     }
 
     public function update(User $user, PerformanceImprovementPlan $model): bool
@@ -36,6 +37,7 @@ class PerformanceImprovementPlanPolicy
         if ($user->isCoach()) {
             return $model->user && $model->user->manager_id === $user->id;
         }
+
         return $model->user_id === $user->id;
     }
 
@@ -47,6 +49,7 @@ class PerformanceImprovementPlanPolicy
         if ($user->isCoach()) {
             return $model->user && $model->user->manager_id === $user->id;
         }
+
         return false;
     }
 }

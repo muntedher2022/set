@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources\CriticalIncidentLogs\Schemas;
 
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextArea;
-use Filament\Forms\Components\DatePicker;
 use Filament\Schemas\Schema;
 
 class CriticalIncidentLogForm

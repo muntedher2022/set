@@ -9,8 +9,8 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 
 class UsersTable
 {
@@ -22,16 +22,16 @@ class UsersTable
                     ->searchable()
                     ->sortable()
                     ->label('الاسم'),
-                
+
                 TextColumn::make('email')
                     ->searchable()
                     ->label('البريد الإلكتروني'),
-                
+
                 TextColumn::make('phone')
                     ->searchable()
                     ->default('—')
                     ->label('رقم الهاتف'),
-                
+
                 TextColumn::make('role')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -52,9 +52,10 @@ class UsersTable
                     ->label('المصادقة بالتطبيق (TOTP)')
                     ->badge()
                     ->state(function (User $record): string {
-                        if (!$record->isTotpRequired()) {
+                        if (! $record->isTotpRequired()) {
                             return 'غير ملزم';
                         }
+
                         return $record->hasTotpSetup() ? 'مفعّل ومرتبط' : 'ملزم - بانتظار الإعداد';
                     })
                     ->color(fn (string $state): string => match ($state) {
@@ -67,7 +68,7 @@ class UsersTable
                         'ملزم - بانتظار الإعداد' => 'heroicon-o-clock',
                         default => 'heroicon-o-minus-circle',
                     }),
-                
+
                 TextColumn::make('manager.name')
                     ->placeholder('لا يوجد مشرف مباشر')
                     ->label('المشرف المباشر'),
@@ -102,7 +103,7 @@ class UsersTable
                         $record->resetTotp();
                         Notification::make()
                             ->title('تمت إعادة ضبط TOTP')
-                            ->body('تم إلغاء ربط تطبيق المصادقة للمستخدم ' . $record->name . ' بنجاح.')
+                            ->body('تم إلغاء ربط تطبيق المصادقة للمستخدم '.$record->name.' بنجاح.')
                             ->success()
                             ->send();
                     }),

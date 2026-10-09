@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,8 +24,8 @@ class IndividualDevelopmentPlan extends Model
     {
         static::saving(function ($model) {
             if ($model->start_date && $model->end_date) {
-                $start = \Carbon\Carbon::parse($model->start_date);
-                $end = \Carbon\Carbon::parse($model->end_date);
+                $start = Carbon::parse($model->start_date);
+                $end = Carbon::parse($model->end_date);
                 $model->duration_in_months = max(1, $start->diffInMonths($end));
             }
         });

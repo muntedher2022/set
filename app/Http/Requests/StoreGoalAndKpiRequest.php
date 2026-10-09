@@ -41,7 +41,7 @@ class StoreGoalAndKpiRequest extends FormRequest
 
             if ($currentTotalWeight + $newWeight > 100.00) {
                 $validator->errors()->add(
-                    'weight', 
+                    'weight',
                     "مجموع الأوزان الحالية للموظف هو {$currentTotalWeight}%. إضافة هذا الهدف بوزن {$newWeight}% يتجاوز الحد الأقصى الرياضي المسموح به (100%)!"
                 );
             }

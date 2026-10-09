@@ -16,5 +16,4 @@ class EditIndividualDevelopmentPlan extends EditRecord
             DeleteAction::make(),
         ];
     }
-
 }

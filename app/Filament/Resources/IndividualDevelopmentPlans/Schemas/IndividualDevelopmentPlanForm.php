@@ -2,13 +2,15 @@
 
 namespace App\Filament\Resources\IndividualDevelopmentPlans\Schemas;
 
-use Filament\Forms\Components\TextInput;
+use Carbon\Carbon;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextArea;
-use Filament\Forms\Components\DatePicker;
-use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
-use Filament\Forms\Components\Repeater;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class IndividualDevelopmentPlanForm
@@ -25,7 +27,7 @@ class IndividualDevelopmentPlanForm
                             ->searchable()
                             ->required()
                             ->label('الموظف المستهدف (الواعد)'),
-                        
+
                         Select::make('mentor_id')
                             ->relationship('mentor', 'name', fn ($query) => $query->whereIn('role', ['admin', 'coach']))
                             ->searchable()
@@ -126,10 +128,10 @@ class IndividualDevelopmentPlanForm
                                                 fn ($get) => function (string $attribute, $value, \Closure $fail) use ($get) {
                                                     $options = self::getMonthOptions($get);
                                                     $validKeys = array_keys($options);
-                                                    if (!in_array((int)$value, $validKeys)) {
-                                                        $fail("الشهر المحدد لا يقع ضمن فترة الخطة.");
+                                                    if (! in_array((int) $value, $validKeys)) {
+                                                        $fail('الشهر المحدد لا يقع ضمن فترة الخطة.');
                                                     }
-                                                }
+                                                },
                                             ])
                                             ->label('من الشهر الرقم'),
 
@@ -141,17 +143,18 @@ class IndividualDevelopmentPlanForm
                                                 fn ($get) => function (string $attribute, $value, \Closure $fail) use ($get) {
                                                     $options = self::getMonthOptions($get);
                                                     $validKeys = array_keys($options);
-                                                    
-                                                    if (!in_array((int)$value, $validKeys)) {
-                                                        $fail("الشهر المحدد لا يقع ضمن فترة الخطة.");
+
+                                                    if (! in_array((int) $value, $validKeys)) {
+                                                        $fail('الشهر المحدد لا يقع ضمن فترة الخطة.');
+
                                                         return;
                                                     }
-                                                    
+
                                                     $startVal = $get('start_month');
-                                                    if ($startVal && (int)$value < (int)$startVal) {
-                                                        $fail("شهر النهاية لا يمكن أن يكون قبل شهر البداية.");
+                                                    if ($startVal && (int) $value < (int) $startVal) {
+                                                        $fail('شهر النهاية لا يمكن أن يكون قبل شهر البداية.');
                                                     }
-                                                }
+                                                },
                                             ])
                                             ->label('إلى الشهر الرقم'),
 
@@ -166,13 +169,14 @@ class IndividualDevelopmentPlanForm
                                                     $validKeys = array_keys($options);
                                                     if (is_array($value)) {
                                                         foreach ($value as $val) {
-                                                            if (!in_array((int)$val, $validKeys)) {
-                                                                $fail("أشهر التطوير المحددة لا يمكن أن تتجاوز مدة الخطة.");
+                                                            if (! in_array((int) $val, $validKeys)) {
+                                                                $fail('أشهر التطوير المحددة لا يمكن أن تتجاوز مدة الخطة.');
+
                                                                 return;
                                                             }
                                                         }
                                                     }
-                                                }
+                                                },
                                             ])
                                             ->columnSpan(2)
                                             ->label('تحديد الأشهر النشطة'),
@@ -204,7 +208,7 @@ class IndividualDevelopmentPlanForm
 
                 Section::make('المخطط الزمني للأنشطة والتطوير (Gantt Chart)')
                     ->schema([
-                        \Filament\Forms\Components\Placeholder::make('gantt_chart')
+                        Placeholder::make('gantt_chart')
                             ->content(fn ($record) => $record ? view('filament.components.idp-gantt-chart', ['record' => $record]) : 'الرجاء حفظ الخطة أولاً لتوليد المخطط الزمني.')
                             ->label(''),
                     ]),
@@ -213,21 +217,22 @@ class IndividualDevelopmentPlanForm
 
     public static function calculateDuration($get): int
     {
-        $start = $get('start_date') 
-            ?? $get('../start_date') 
-            ?? $get('../../start_date') 
-            ?? $get('../../../start_date') 
+        $start = $get('start_date')
+            ?? $get('../start_date')
+            ?? $get('../../start_date')
+            ?? $get('../../../start_date')
             ?? $get('../../../../start_date');
-        $end = $get('end_date') 
-            ?? $get('../end_date') 
-            ?? $get('../../end_date') 
-            ?? $get('../../../end_date') 
+        $end = $get('end_date')
+            ?? $get('../end_date')
+            ?? $get('../../end_date')
+            ?? $get('../../../end_date')
             ?? $get('../../../../end_date');
 
         if ($start && $end) {
             try {
-                $startDate = \Carbon\Carbon::parse($start);
-                $endDate = \Carbon\Carbon::parse($end);
+                $startDate = Carbon::parse($start);
+                $endDate = Carbon::parse($end);
+
                 return max(1, $startDate->diffInMonths($endDate));
             } catch (\Exception $e) {
                 return 12;
@@ -239,23 +244,23 @@ class IndividualDevelopmentPlanForm
 
     public static function getMonthOptions($get): array
     {
-        $start = $get('start_date') 
-            ?? $get('../start_date') 
-            ?? $get('../../start_date') 
-            ?? $get('../../../start_date') 
+        $start = $get('start_date')
+            ?? $get('../start_date')
+            ?? $get('../../start_date')
+            ?? $get('../../../start_date')
             ?? $get('../../../../start_date');
-        
+
         $duration = self::calculateDuration($get);
-        
+
         $startMonth = 1;
         if ($start) {
             try {
-                $startMonth = \Carbon\Carbon::parse($start)->month;
+                $startMonth = Carbon::parse($start)->month;
             } catch (\Exception $e) {
                 $startMonth = 1;
             }
         }
-        
+
         $options = [];
         $arabicMonths = [
             1 => 'يناير',
@@ -271,14 +276,14 @@ class IndividualDevelopmentPlanForm
             11 => 'نوفمبر',
             12 => 'ديسمبر',
         ];
-        
+
         for ($i = 1; $i <= $duration; $i++) {
             $val = $startMonth + $i - 1;
             $monthNum = (($val - 1) % 12) + 1;
-            $yearSuffix = ($val > 12) ? " - السنة الثانية" : "";
-            $options[$val] = "الشهر $monthNum (" . $arabicMonths[$monthNum] . ")$yearSuffix";
+            $yearSuffix = ($val > 12) ? ' - السنة الثانية' : '';
+            $options[$val] = "الشهر $monthNum (".$arabicMonths[$monthNum].")$yearSuffix";
         }
-        
+
         return $options;
     }
 
@@ -288,8 +293,8 @@ class IndividualDevelopmentPlanForm
         $end = $get('end_date');
         if ($start && $end) {
             try {
-                $startDate = \Carbon\Carbon::parse($start);
-                $endDate = \Carbon\Carbon::parse($end);
+                $startDate = Carbon::parse($start);
+                $endDate = Carbon::parse($end);
                 $duration = max(1, $startDate->diffInMonths($endDate));
                 $set('duration_in_months', $duration);
             } catch (\Exception $e) {
