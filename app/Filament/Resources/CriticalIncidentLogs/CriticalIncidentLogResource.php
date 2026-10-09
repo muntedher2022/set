@@ -18,7 +18,7 @@ class CriticalIncidentLogResource extends Resource
 {
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
+        $query = parent::getEloquentQuery()->with(['user', 'reporter']);
         $user = auth()->user();
 
         if ($user->isAdmin()) {

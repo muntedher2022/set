@@ -18,7 +18,7 @@ class GrowSessionResource extends Resource
 {
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
+        $query = parent::getEloquentQuery()->with(['user', 'coach']);
         $user = auth()->user();
 
         if ($user->isAdmin()) {

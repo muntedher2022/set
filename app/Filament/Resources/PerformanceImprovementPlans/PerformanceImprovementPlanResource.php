@@ -18,7 +18,7 @@ class PerformanceImprovementPlanResource extends Resource
 {
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
+        $query = parent::getEloquentQuery()->with(['user']);
         $user = auth()->user();
 
         if ($user->isAdmin()) {
